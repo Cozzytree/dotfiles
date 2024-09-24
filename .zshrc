@@ -7,6 +7,8 @@
 #fi
 
 eval "$(starship init zsh)"
+export LANG=en_IN.UTF-8
+export LC_ALL=en_IN.UTF-8
 
 # source /usr/share/cachyos-zsh-config/cachyos-config.zsh
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.

@@ -41,7 +41,7 @@ window {
     padding:                     0px;
     border-radius:               12px;
     cursor:                      "default";
-    background-image:            url("~/Pictures/nasa-WKT3TE5AQu0-unsplash.jpg", width);
+    background-image:            url("~/Pictures/space.jpg", width);
 }
 
 /*****----- Main Box -----*****/
