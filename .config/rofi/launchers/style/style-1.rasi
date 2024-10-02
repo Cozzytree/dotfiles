@@ -9,7 +9,7 @@
 
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,filebrowser,window";
+   	modi:                       "drun,filebrowser,window";
     show-icons:                 true;
     display-drun:               "APPS";
     display-run:                "RUN";
@@ -21,7 +21,7 @@ configuration {
 
 /*****----- Global Properties -----*****/
 * {
-    font:                        "Iosevka Nerd Font 10";
+    font:                        "Balsamiq Sans 12";
 }
 
 /*****----- Main Window -----*****/
@@ -31,7 +31,7 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       1000px;
+    width:                       800px;
     x-offset:                    0px;
     y-offset:                    0px;
 
@@ -41,7 +41,7 @@ window {
     padding:                     0px;
     border-radius:               12px;
     cursor:                      "default";
-    background-image:            url("~/Pictures/space.jpg", width);
+    background-image:            url("~/Pictures/beach.jpg", width);
 }
 
 /*****----- Main Box -----*****/

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-THEME="Orchis-Dark-Compact"
-ICON="tokyo-night"
-FONT="BalsamiqSans"
+THEME="WhiteSur-Dark"
+ICON="TokyoNight-SE"
+FONT="Arial 13"
 CURSOR="Bibata-Modern-Ice-Extra-Large-Windows"
 
 gsettings set org.gnome.desktop.interface gtk-theme "$THEME"
