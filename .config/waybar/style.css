@@ -2,21 +2,25 @@
    font-family: Balsamiq Sans;
    font-size: 14px;
    font-weight: 900;
-   min-height: 15px;
 }
 
 window#waybar {
-   background-color: rgba(0, 0, 0, 0.7);
+   background-color: rgba(10, 10, 10, 0.8);
    color: white;
+   border-radius: 10px;
 }
 
 #taskbar {
+   margin-top: 5px;
+   margin-bottom: 5px;
    margin-left: 10px;
    margin-right: 20px;
 }
 
 #taskbar button {
-  border-radius : 0px;
+  margin-left: 2px;
+  margin-right: 2px;
+  border-radius : 3px;
   transition : border 200ms ease;
   border-bottom : 2px solid transparent;
 }
@@ -32,8 +36,11 @@ window#waybar {
 }
 
 #workspaces {
-  padding-top: 3px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 20px;
 }
+
 #workspaces button {
   color: @content_inactive;
   border-radius: 0;
@@ -41,7 +48,7 @@ window#waybar {
 	transition: all 0.25s ease;
 }
 #workspaces button.active {
-	border-bottom: 3px solid white;
+	border-bottom: 2px solid white;
 }
 #workspaces button.focused {
   color: @bg_active;
@@ -82,11 +89,16 @@ window#waybar {
    margin-left: 2px;
    margin-right: 2px;
    margin-bottom: 5px;
+   margin-top: 5px;
+}
+
+#custom-power {
+  padding-right: 10px;
 }
 
 #mpris {
  padding: 0 15px;
- border: 1px solid white;
+ margin-top: 5px;
  margin-bottom: 5px;
  border-radius: 5px;
 }
@@ -194,23 +206,10 @@ window#waybar {
    border-radius: 15px;
 }
 
-#clock {
-   background: rgb(245, 194, 231);
-   background: linear-gradient(
-      45deg,
-      rgba(245, 194, 231, 1) 0%,
-      rgba(203, 166, 247, 1) 64%,
-      rgba(202, 158, 230, 1) 100%
-   );
-   margin-right: 25px;
-   color: black;
+#clock { 
+   color: white;
    background-size: 300% 300%;
-   text-shadow: 0 0 5px rgba(0, 0, 0, 0.377);
-   animation: gradient 20s ease infinite;
-   font-size: 15px;
-   padding-right: 21px;
    font-weight: bolder;
-   padding-left: 20px;
 }
 
 #battery.charging,

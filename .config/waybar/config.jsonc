@@ -21,11 +21,11 @@
       "custom/power",
    ],
    "cpu": {
-      "format": "{usage}% ",
+      "format": "CPU {usage}% ",
       "tooltip": false,
    },
    "memory": {
-      "format": "{}% ",
+      "format": "MEM {}% ",
    },
    "bluetooth": {
       "format": " {status}",
@@ -41,7 +41,8 @@
       "icon-size": 13,
    },
   "wlr/taskbar": {
-      "format": "{icon} {title:.17}",
+      //"format": "{icon} {title:.17}",
+      "format": "{icon}",
       "icon-size": 25,
       "spacing": 3,
       "on-click-middle": "close",
@@ -56,7 +57,7 @@
         "on-scroll-down": "hyprctl dispatch workspace r-1"
    },
   "custom/power": {
-      "format": "🔋{}",
+      "format": "⏻{}",
       "rotate": 0,
       "on-click": "exec ~/.config/rofi/powermenu/powermenu.sh",
       "on-click-right": "pkill ags",
