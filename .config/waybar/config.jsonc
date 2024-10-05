@@ -6,7 +6,7 @@
    "passthrough": false,
    "gtk-layer-shell": true,
    "height": 15,
-   "modules-left": ["hyprland/workspaces", "wlr/taskbar"],
+   "modules-left": ["custom/icon", "hyprland/workspaces", "wlr/taskbar"],
    "modules-center": ["hyprland/window"],
    "modules-right": [
       "tray",
@@ -20,6 +20,13 @@
       "clock",
       "custom/power",
    ],
+   "custom/icon": {
+     "format": "😊",
+     "on-click": "exec ~/.config/rofi/launchers/launcher.sh",
+   },
+   "backlight":{
+     "format" : "{}%"
+   },
    "cpu": {
       "format": "CPU {usage}% ",
       "tooltip": false,
