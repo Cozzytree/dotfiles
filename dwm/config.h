@@ -21,7 +21,7 @@ static const int showbar                 = 1;   /* 0 means no bar */
 static const int topbar                  = 1;   /* 0 means bottom bar */
 static const int vertpad                 = 0;  /* vertical padding of bar */
 static const int sidepad                 = 0;  /* horizontal padding of bar */
-#define ICONSIZE 18    /* icon size */
+#define ICONSIZE 15    /* icon size */
 #define ICONSPACING 5  /* space between icon and title */
 /* Status is to be shown on: -1 (all monitors), 0 (a specific monitor by index), 'A' (active monitor) */
 static const int statusmon               = 'A';
@@ -297,15 +297,15 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY,                       XK_Left,       focusstack,             {.i = +1 } },
 	{ MODKEY,                       XK_Right,      focusstack,             {.i = -1 } },
-	{ MODKEY|Mod1Mask,              XK_j,          rotatestack,            {.i = +1 } },
-	{ MODKEY|Mod1Mask,              XK_k,          rotatestack,            {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_Left,       rotatestack,            {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_Right,      rotatestack,            {.i = -1 } },
 	{ MODKEY,                       XK_i,          incnmaster,             {.i = +1 } },
 	{ MODKEY,                       XK_d,          incnmaster,             {.i = -1 } },
 	{ MODKEY|ControlMask,           XK_i,          incnstack,              {.i = +1 } },
 	{ MODKEY|ControlMask,           XK_u,          incnstack,              {.i = -1 } },
 	{ MODKEY,                       XK_h,          setmfact,               {.f = -0.05} },
 	{ MODKEY,                       XK_l,          setmfact,               {.f = +0.05} },
-	{ MODKEY,                       XK_Return,     zoom,                   {0} },
+	{ MODKEY|ShiftMask,             XK_Return,     zoom,                   {0} },
 	{ MODKEY|Mod1Mask,              XK_u,          incrgaps,               {.i = +1 } },
 	{ MODKEY|Mod1Mask|ShiftMask,    XK_u,          incrgaps,               {.i = -1 } },
 	{ MODKEY|Mod1Mask,              XK_i,          incrigaps,              {.i = +1 } },

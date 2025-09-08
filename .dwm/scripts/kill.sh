@@ -6,5 +6,5 @@ choice=$(printf "Quit\ndo nothing" | rofi -theme "$HOME/.config/rofi/powermenu/t
 # If the user pressed Esc or closed rofi, $choice will be empty
 if [ "$choice" = "Quit" ]; then
   # Terminate dwm gracefully
-  pkill -TERM swm
+  pkill -TERM dwm
 fi

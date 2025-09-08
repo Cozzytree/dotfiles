@@ -70,7 +70,7 @@
 /* Adds buttons to the bar that can be used to launch applications.
  * https://dwm.suckless.org/patches/launcher/
  */
-#define BAR_LAUNCHER_PATCH 0
+#define BAR_LAUNCHER_PATCH 1
 
 /* This patch adds a context menu for layout switching.
  *   - xmenu needs to be installed.

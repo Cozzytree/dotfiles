@@ -32,9 +32,9 @@ static const int sidepad                 = 10;  /* horizontal padding of bar */
 static const int statusmon               = 'A';
 static const int horizpadbar             = 10;   /* horizontal padding for statusbar */
 static const int vertpadbar              = 10;   /* vertical padding for statusbar */
-static const unsigned int systrayspacing = 2;   /* systray spacing */
+static const unsigned int systrayspacing = 4;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
-static const unsigned int ulinepad       = 5;   /* horizontal padding between the underline and tag */
+static const unsigned int ulinepad       = 0;   /* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke    = 2;   /* thickness / height of the underline */
 static const unsigned int ulinevoffset   = 0;   /* how far above the bottom of the bar the line should appear */
 static const int ulineall                = 0;   /* 1 to show underline on all tags, 0 for just the active ones */
@@ -49,13 +49,13 @@ static const char dmenufont[]            = "JetBrainsMono Nerd Font:size=10:styl
 static char c000000[]                    = "#000000"; // placeholder value
 
 static char normfgcolor[]                = "#bbbbbb";
-static char normbgcolor[]                = "#222222";
+static char normbgcolor[]                = "#181818";
 static char normbordercolor[]            = "#222222";
 static char normfloatcolor[]             = "#db8fd9";
 
 static char selfgcolor[]                 = "#eeeeee";
 static char selbgcolor[]                 = "#005577";
-static char selbordercolor[]             = "#808080";
+static char selbordercolor[]             = "#909090";
 static char selfloatcolor[]              = "#005577";
 
 static char titlenormfgcolor[]           = "#bbbbbb";
@@ -74,8 +74,8 @@ static char tagsnormbordercolor[]        = "#444444";
 static char tagsnormfloatcolor[]         = "#db8fd9";
 
 static char tagsselfgcolor[]             = "#eeeeee";
-static char tagsselbgcolor[]             = "#005577";
-static char tagsselbordercolor[]         = "#005577";
+static char tagsselbgcolor[]             = "#222222";
+static char tagsselbordercolor[]         = "#808080";
 static char tagsselfloatcolor[]          = "#005577";
 
 static char hidnormfgcolor[]             = "#005577";
@@ -130,7 +130,7 @@ static char *colors[][ColCount] = {
  */
 static char *tagicons[][NUMTAGS] =
 {
-	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
+	[DEFAULT_TAGS]        = { "", "", "", "", "", "", "7", "8", "9" },
 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
 	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
 };
@@ -166,11 +166,15 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
 	RULE(.class = "Gimp", .tags = 1 << 4)
 	RULE(.class = "Firefox", .tags = 1 << 7)
-   RULE(.class = "Vivaldi", .tags = 1 << 1)
-   RULE(.class = "Alacritty", .tags = 0)
-   RULE(.class = "alacritty", .tags = 0)
+   // RULE(.class = "Vivaldi", .tags = 1 << 1)
+   // RULE(.class = "Chromium", .tags = 1 << 1)
+   RULE(.class = "Discord", .tags = 1 << 3)
+   // RULE(.class = "Whatsapp", .tags = 1 << 5)
+   // RULE(.class = "Alacritty", .tags = 1 << 0)
+   // RULE(.class = "alacritty", .tags = 1 << 0)
    RULE(.class = "Navigator", .tags = 1 << 1)
-   RULE(.class = "zen", .tags = 1 << 1)
+   // RULE(.class = "zen", .tags = 1 << 1)
+   // RULE(.class = "dev.zed.Zed", .tags = 1 << 0)
 };
 
 /* Bar rules allow you to configure what is shown where on the bar, as well as
@@ -205,7 +209,7 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function, { nmaster, nstack, layout, master axis, stack axis, secondary stack axis, symbol func } */
-	{ "[]=",      flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, // default tile layout
+	{ "[]",       flextile,         { -1, -1, SPLIT_VERTICAL, TOP_TO_BOTTOM, TOP_TO_BOTTOM, 0, NULL } }, // default tile layout
  	{ "><>",      NULL,             {0} },    /* no layout function means floating behavior */
 	{ "[M]",      flextile,         { -1, -1, NO_SPLIT, MONOCLE, MONOCLE, 0, NULL } }, // monocle
 	{ "|||",      flextile,         { -1, -1, SPLIT_VERTICAL, LEFT_TO_RIGHT, TOP_TO_BOTTOM, 0, NULL } }, // columns (col) layout
@@ -256,6 +260,8 @@ static const char *dmenucmd[] = {
 	NULL
 };
 static const char *termcmd[]  = { "alacritty", NULL };
+static const char *colorPicker[]  = { "/home/cozzycode/.dwm/scripts/colorpicker.sh", NULL };
+static const char *wallSelect[]  = { "/home/cozzycode/.dwm/scripts/wallpaper.sh", NULL };
 static const char *clipcat[]  = { "clipcat-menu", NULL };
 static const char *rofi[]  = { "/home/cozzycode/.config/rofi/launchers/type-1/launcher.sh", NULL };
 static const char *brightUp[] = {"/home/cozzycode/.dwm/scripts/brightness.sh", "up", NULL};
@@ -282,8 +288,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_v,          spawn,                  {.v = clipcat } },
    { MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
    { MODKEY,                       XK_e,          spawn,                  SHCMD("dolphin") },
+   { MODKEY,                       XK_w,          spawn,                  {.v = wallSelect} },
    { MODKEY,                       XK_r,          spawn,                  SHCMD("kitty -e ranger") },
-   { MODKEY,                       XK_y,          spawn,                  SHCMD("youtube") },
+   { MODKEY,                       XK_y,          spawn,                  SHCMD("YouTube") },
+   { MODKEY,                       XK_c,          spawn,                  {.v = colorPicker } },
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY|ShiftMask,             XK_b,          toggletopbar,           {0} },
 	{ MODKEY,                       XK_Left,       focusstack,             {.i = +1 } },
@@ -395,4 +403,3 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,              Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,              Button3,        toggletag,      {0} },
 };
-
