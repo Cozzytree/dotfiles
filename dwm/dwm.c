@@ -193,12 +193,16 @@ struct Client {
 	char name[256];
 	float mina, maxa;
 	int x, y, w, h;
+	int sfx, sfy, sfw, sfh; /* stored float geometry, used on mode revert */
 	int oldx, oldy, oldw, oldh;
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh, hintsvalid;
 	int bw, oldbw;
 	unsigned int tags;
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen;
 	int fakefullscreen;
+	unsigned char expandmask;
+	int expandx1, expandy1, expandx2, expandy2;
+	int wasfloating;
 	Client *next;
 	Client *snext;
 	Monitor *mon;
@@ -327,7 +331,6 @@ static void maprequest(XEvent *e);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
 static Client *nexttiled(Client *c);
-static int noborder(Client *c);
 static void pop(Client *c);
 static void propertynotify(XEvent *e);
 static void quit(const Arg *arg);
@@ -803,12 +806,6 @@ configure(Client *c)
 	ce.height = c->h;
 	ce.border_width = c->bw;
 
-	if (noborder(c)) {
-		ce.width += c->bw * 2;
-		ce.height += c->bw * 2;
-		ce.border_width = 0;
-	}
-
 	ce.above = None;
 	ce.override_redirect = False;
 	XSendEvent(dpy, c->win, False, StructureNotifyMask, (XEvent *)&ce);
@@ -942,7 +939,7 @@ createmon(void)
 		istopbar = !istopbar;
 		bar->showbar = 1;
 		bar->external = 0;
-		bar->borderpx = 0;
+		bar->borderpx = (barborderpx ? barborderpx : borderpx);
 		bar->bh = bh + bar->borderpx * 2;
 		bar->borderscheme = SchemeNorm;
 	}
@@ -1479,6 +1476,7 @@ manage(Window w, XWindowAttributes *wa)
 	c = ecalloc(1, sizeof(Client));
 	c->win = w;
 	/* geometry */
+	c->sfx = c->sfy = c->sfw = c->sfh = -9999;
 	c->x = c->oldx = wa->x;
 	c->y = c->oldy = wa->y;
 	c->w = c->oldw = wa->width;
@@ -1514,14 +1512,19 @@ manage(Window w, XWindowAttributes *wa)
 	updatesizehints(c);
 	updatewmhints(c);
 
-	c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
-	c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
+	c->sfx = c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
+	c->sfy = c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
+	if (c->sfw == -9999) {
+		c->sfw = c->w;
+		c->sfh = c->h;
+	}
 
 	if (getatomprop(c, netatom[NetWMState], XA_ATOM) == netatom[NetWMFullscreen])
 		setfullscreen(c, 1);
 
 	XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
 	grabbuttons(c, 0);
+	c->wasfloating = 0;
 
 	if (!c->isfloating)
 		c->isfloating = c->oldstate = trans != None || c->isfixed;
@@ -1649,6 +1652,7 @@ movemouse(const Arg *arg)
 				ny = selmon->wy + selmon->wh - HEIGHT(c);
 			if (!c->isfloating && selmon->lt[selmon->sellt]->arrange
 			&& (abs(nx - c->x) > snap || abs(ny - c->y) > snap)) {
+				c->sfx = -9999; // disable savefloats when using movemouse
 				togglefloating(NULL);
 			}
 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
@@ -1664,6 +1668,11 @@ movemouse(const Arg *arg)
 		selmon = m;
 		focus(NULL);
 	}
+	/* save last known float coordinates */
+	if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
+		c->sfx = nx;
+		c->sfy = ny;
+	}
 	ignoreconfigurerequests = 0;
 }
 
@@ -1672,39 +1681,6 @@ nexttiled(Client *c)
 {
 	for (; c && (c->isfloating || !ISVISIBLE(c) || HIDDEN(c)); c = c->next);
 	return c;
-}
-
-int
-noborder(Client *c)
-{
-	int monocle_layout = 0;
-
-	if (&monocle == c->mon->lt[c->mon->sellt]->arrange)
-		monocle_layout = 1;
-
-	if (&deck == c->mon->lt[c->mon->sellt]->arrange && c->mon->nmaster == 0)
-		monocle_layout = 1;
-
-	if (&flextile == c->mon->lt[c->mon->sellt]->arrange && (
-		(c->mon->ltaxis[LAYOUT] == NO_SPLIT && c->mon->ltaxis[MASTER] == MONOCLE) ||
-		(c->mon->ltaxis[STACK] == MONOCLE && c->mon->nmaster == 0)
-	)) {
-		monocle_layout = 1;
-	}
-
-	if (!monocle_layout && (nexttiled(c->mon->clients) != c || nexttiled(c->next)))
-		return 0;
-
-	if (c->isfloating)
-		return 0;
-
-	if (!c->mon->lt[c->mon->sellt]->arrange)
-		return 0;
-
-	if (c->fakefullscreen != 1 && c->isfullscreen)
-		return 0;
-
-	return 1;
 }
 
 void
@@ -1804,12 +1780,8 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	c->oldy = c->y; c->y = wc.y = y;
 	c->oldw = c->w; c->w = wc.width = w;
 	c->oldh = c->h; c->h = wc.height = h;
+	c->expandmask = 0;
 	wc.border_width = c->bw;
-	if (noborder(c)) {
-		wc.width += c->bw * 2;
-		wc.height += c->bw * 2;
-		wc.border_width = 0;
-	}
 	XConfigureWindow(dpy, c->win, CWX|CWY|CWWidth|CWHeight|CWBorderWidth, &wc);
 	configure(c);
 	XSync(dpy, False);
@@ -1872,6 +1844,7 @@ resizemouse(const Arg *arg)
 			{
 				if (!c->isfloating && selmon->lt[selmon->sellt]->arrange
 				&& (abs(nw - c->w) > snap || abs(nh - c->h) > snap)) {
+					c->sfx = -9999; // disable savefloats when using resizemouse
 					togglefloating(NULL);
 				}
 			}
@@ -1891,6 +1864,13 @@ resizemouse(const Arg *arg)
 		sendmon(c, m);
 		selmon = m;
 		focus(NULL);
+	}
+	/* save last known float dimensions */
+	if (!selmon->lt[selmon->sellt]->arrange || c->isfloating) {
+		c->sfx = nx;
+		c->sfy = ny;
+		c->sfw = nw;
+		c->sfh = nh;
 	}
 	ignoreconfigurerequests = 0;
 }
@@ -1980,6 +1960,7 @@ scan(void)
 void
 sendmon(Client *c, Monitor *m)
 {
+	Monitor *oldm = selmon;
 	if (c->mon == m)
 		return;
 	unfocus(c, 1, NULL);
@@ -1989,8 +1970,11 @@ sendmon(Client *c, Monitor *m)
 	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
 	attach(c);
 	attachstack(c);
-	arrange(NULL);
-	focus(NULL);
+	if (oldm != m)
+		arrange(oldm);
+	arrange(m);
+	focus(c);
+	restack(m);
 }
 
 void
@@ -2126,6 +2110,15 @@ setlayout(const Arg *arg)
 	if (!arg || !arg->v || arg->v != selmon->lt[selmon->sellt]) {
 		selmon->pertag->sellts[selmon->pertag->curtag] ^= 1;
 		selmon->sellt = selmon->pertag->sellts[selmon->pertag->curtag];
+		if (!selmon->lt[selmon->sellt]->arrange) {
+			for (Client *c = selmon->clients ; c ; c = c->next) {
+				if (!c->isfloating) {
+					/*restore last known float dimensions*/
+					resize(c, selmon->mx + c->sfx, selmon->my + c->sfy,
+					       c->sfw, c->sfh, False);
+				}
+			}
+		}
 	}
 	if (arg && arg->v)
 		selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt] = (Layout *)arg->v;
@@ -2294,6 +2287,12 @@ showhide(Client *c)
 		return;
 	if (ISVISIBLE(c)) {
 		/* show clients top down */
+		if (!c->mon->lt[c->mon->sellt]->arrange && c->sfx != -9999 && !c->isfullscreen) {
+			XMoveResizeWindow(dpy, c->win, c->sfx, c->sfy, c->sfw, c->sfh);
+			resize(c, c->sfx, c->sfy, c->sfw, c->sfh, 0);
+			showhide(c->snext);
+			return;
+		}
 		XMoveWindow(dpy, c->win, c->x, c->y);
 		if ((!c->mon->lt[c->mon->sellt]->arrange || c->isfloating)
 			&& !c->isfullscreen
@@ -2390,7 +2389,17 @@ togglefloating(const Arg *arg)
 	else
 		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
 	if (c->isfloating) {
+		if (c->sfx != -9999) {
+			/* restore last known float dimensions */
+			resize(c, c->sfx, c->sfy, c->sfw, c->sfh, 0);
+		} else
 		resize(c, c->x, c->y, c->w, c->h, 0);
+	} else {
+		/* save last known float dimensions */
+		c->sfx = c->x;
+		c->sfy = c->y;
+		c->sfw = c->w;
+		c->sfh = c->h;
 	}
 	arrange(c->mon);
 

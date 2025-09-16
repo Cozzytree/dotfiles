@@ -19,8 +19,10 @@
 
 /* Other patches */
 #include "autostart.c"
+#include "exresize.c"
 #include "fakefullscreenclient.c"
 #include "fullscreen.c"
+#include "moveresize.c"
 #include "pertag.c"
 #include "restartsig.c"
 #include "rotatestack.c"
