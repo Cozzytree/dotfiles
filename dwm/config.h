@@ -10,33 +10,33 @@ static const unsigned int borderpx       = 1;   /* border pixel of windows */
  * If left as 0 then it will default to the borderpx value of the monitor and will
  * automatically update with setborderpx. */
 static const unsigned int barborderpx    = 0;  /* border pixel of bar */
-static const unsigned int snap           = 32;  /* snap pixel */
-static const int scalepreview            = 4;        /* Tag preview scaling */
-static const unsigned int gappih         = 20;  /* horiz inner gap between windows */
+static const unsigned int snap           = 32; /* snap pixel */
+static const int scalepreview            = 4;  /* Tag preview scaling */
+static const unsigned int gappih         = 0;  /* horiz inner gap between windows */
 static const unsigned int gappiv         = 0;  /* vert inner gap between windows */
 static const unsigned int gappoh         = 0;  /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov         = 0;  /* vert outer gap between windows and screen edge */
-static const int smartgaps_fact          = 1;   /* gap factor when there is only one client; 0 = no gaps, 3 = 3x outer gaps */
+static const int smartgaps_fact          = 1;  /* gap factor when there is only one client; 0 = no gaps, 3 = 3x outer gaps */
 static const char autostartblocksh[]     = "autostart_blocking.sh";
 static const char autostartsh[]          = "autostart.sh";
 static const char dwmdir[]               = "dwm";
 static const char localshare[]           = ".local/share";
-static const int showbar                 = 1;   /* 0 means no bar */
-static const int topbar                  = 1;   /* 0 means bottom bar */
+static const int showbar                 = 1;  /* 0 means no bar */
+static const int topbar                  = 1;  /* 0 means bottom bar */
 static const int vertpad                 = 0;  /* vertical padding of bar */
 static const int sidepad                 = 0;  /* horizontal padding of bar */
 #define ICONSIZE 18    /* icon size */
 #define ICONSPACING 5  /* space between icon and title */
 /* Status is to be shown on: -1 (all monitors), 0 (a specific monitor by index), 'A' (active monitor) */
 static const int statusmon               = 'A';
-static const int horizpadbar             = 5;   /* horizontal padding for statusbar */
-static const int vertpadbar              = 5;   /* vertical padding for statusbar */
+static const int horizpadbar             = 3;   /* horizontal padding for statusbar */
+static const int vertpadbar              = 3;   /* vertical padding for statusbar */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
-static const unsigned int ulinepad = 1;         /* horizontal padding between the underline and tag */
-static const unsigned int ulinestroke  = 2;     /* thickness / height of the underline */
-static const unsigned int ulinevoffset = 0;     /* how far above the bottom of the bar the line should appear */
-static const int ulineall = 0;                  /* 1 to show underline on all tags, 0 for just the active ones */
+static const unsigned int ulinepad       = 2;   /* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke    = 2;   /* thickness / height of the underline */
+static const unsigned int ulinevoffset   = 0;   /* how far above the bottom of the bar the line should appear */
+static const int ulineall                = 0;   /* 1 to show underline on all tags, 0 for just the active ones */
 
 /* Indicators: see patch/bar_indicators.h for options */
 static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
@@ -44,8 +44,8 @@ static int tiledindicatortype            = INDICATOR_NONE;
 static int floatindicatortype            = INDICATOR_TOP_LEFT_SQUARE;
 static int fakefsindicatortype           = INDICATOR_PLUS;
 static int floatfakefsindicatortype      = INDICATOR_PLUS_AND_LARGER_SQUARE;
-static const char *fonts[]               = { "GeistMono Nerd Font:size=11:style=SemiBold" };
-static const char dmenufont[]            = "Geist Mono:size=12:style=Bold";
+static const char *fonts[]               = { "GeistMono Nerd Font:size=10:style=SemiBold" };
+static const char dmenufont[]            = "GeistMono Nerd Font:size=12:style=SemiBold";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
@@ -64,7 +64,7 @@ static char titlenormbgcolor[]           = "#181818";
 static char titlenormbordercolor[]       = "#444444";
 static char titlenormfloatcolor[]        = "#db8fd9";
 
-static char titleselfgcolor[]            = "#eeeeee";
+static char titleselfgcolor[]            = "#b8bb26";
 static char titleselbgcolor[]            = "#181818";
 static char titleselbordercolor[]        = "#005577";
 static char titleselfloatcolor[]         = "#005577";
@@ -72,9 +72,9 @@ static char titleselfloatcolor[]         = "#005577";
 static char tagsnormfgcolor[]            = "#bbbbbb";
 static char tagsnormbgcolor[]            = "#181818";
 static char tagsnormbordercolor[]        = "#444444";
-static char tagsnormfloatcolor[]         = "#db8fd9";
+static char tagsnormfloatcolor[]         = "#444444";
 
-static char tagsselfgcolor[]             = "#eeeeee";
+static char tagsselfgcolor[]             = "#b8bb26";
 static char tagsselbgcolor[]             = "#181818";
 static char tagsselbordercolor[]         = "#005577";
 static char tagsselfloatcolor[]          = "#005577";
@@ -183,6 +183,7 @@ static const Rule rules[] = {
    RULE(.class = "Xdg-desktop-portal", .isfloating = 1)
 	RULE(.class = "Gimp", .tags = 1 << 4)
 	RULE(.class = "firefox", .tags = 1 << 1)
+	RULE(.class = "Chromium", .tags = 1 << 1)
    RULE(.class = "kitty", .tags = 1 << 0)
 	RULE(.class = "Gimp", .tags = 1 << 4)
 	RULE(.class = "Firefox", .tags = 1 << 7)
@@ -274,7 +275,7 @@ static const char *dmenucmd[] = {
 	topbar ? NULL : "-b",
 	NULL
 };
-static const char *termcmd[]  = { "alacritty", NULL };
+static const char *termcmd[]  = { "st", NULL };
 static const char *colorPicker[] = {"xcolor", "-s", "-S", "2", NULL};
 static const char *rofi[]  = { "/home/cozzycode/.config/rofi/launchers/type-1/launcher.sh", NULL };
 static const char *brightUp[] = {"/home/cozzycode/.dwm/scripts/brightness.sh", "up", NULL};
@@ -297,12 +298,14 @@ static const Key keys[] = {
 	{ 0,                            XK_F10,        spawn,                  {.v = brightUp } },
 	{ 0,                            XK_F12,        spawn,                  {.v = brightDown } },
 	{ MODKEY,                       XK_p,          spawn,                  {.v = dmenucmd } },
+	{ MODKEY,                       XK_e,          spawn,                  CMD("dolphin") },
+	{ MODKEY,                       XK_r,          spawn,                  CMD("ghostty", "-e", "ranger") },
+	{ MODKEY,                       XK_c,          spawn,                  CMD("chromium") },
+	{ MODKEY,                       XK_w,          spawn,                  CMD("/home/cozzycode/.dwm/scripts/wallpaper.sh", NULL) },
 	{ MODKEY,                       XK_Return,     spawn,                  {.v = termcmd } },
 	{ MODKEY,                       XK_a,          spawn,                  {.v = rofi } },
 	{ MODKEY,                       XK_v,          spawn,                  {.v = clipmenu } },
 	{ Mod1Mask,                     XK_c,          spawn,                  {.v = colorPicker } },
-	{ MODKEY,                       XK_p,          spawn,                  {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
 	{ MODKEY,                       XK_b,          togglebar,              {0} },
 	{ MODKEY,                       XK_Left,       focusstack,             {.i = +1 } },
 	{ MODKEY,                       XK_Right,      focusstack,             {.i = -1 } },

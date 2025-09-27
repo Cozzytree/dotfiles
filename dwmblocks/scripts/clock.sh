@@ -1,3 +1,3 @@
 #!/bin/bash
 
-printf '%s\n' "$(date '+%b %d %a %I:%M%p')"
+printf '%s\n' "$(date '+%b_%d_%a_%I:%M%p')"

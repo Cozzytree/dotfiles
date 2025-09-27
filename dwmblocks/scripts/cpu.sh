@@ -14,4 +14,4 @@ total_delta=$((total - prev_total))
 idle_delta=$((idle - prev_idle))
 
 usage=$((100 * (total_delta - idle_delta) / total_delta))
-printf "CPU usage: %d%%\n" "$usage"
+printf " %d%%\n" "$usage"

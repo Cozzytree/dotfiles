@@ -58,6 +58,7 @@ if [ -n "${selected:-}" ]; then
     chosen_fullpath="$(awk -F '\t' -v s="$selected" '$1 == s { print $2; exit }' "$tmpfile")"
     if [ -n "$chosen_fullpath" ]; then
         feh --no-fehbg --bg-fill "$chosen_fullpath"
+        echo "$chosen_fullpath" > ~/.dwm/current_wallpaper
     else
         echo "Selected wallpaper not found." >&2
         exit 1

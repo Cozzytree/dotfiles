@@ -4,18 +4,17 @@
 TERM = "xterm-256color"
 
 [font]
-normal = { family = "JetBrainsMono Nerd Font", style = "ExtraBold" }
-# normal = { family = "Geist Mono", style = "ExtraBold" }
+normal = { family = "GeistMono Nerd Font", style = "Bold" }
 bold = { family = "Geist Mono", style = "Bold" }
 italic = { family = "Geist Mono", style = "Italic" }
 size = 14
-offset = { x = 0, y = -5 }
+offset = { x = 0, y = -3 }
 
 [window]
 padding.x = 5
 padding.y = 5
 decorations = "None"
-opacity = 1
+opacity = 0.95
 
 [keyboard]
 bindings = [

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Prefix icon
-printf "  "
+printf " "
 
 # Get current and maximum brightness values
 curr=$(brightnessctl get)
@@ -11,4 +11,4 @@ max=$(brightnessctl max)
 percent=$((curr * 100 / max))
 
 # Print percentage followed by “%”
-printf "%d%%\n" "$percent"
+printf "%d%%" "$percent"

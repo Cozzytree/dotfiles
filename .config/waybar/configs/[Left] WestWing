@@ -1,0 +1,42 @@
+/* ---- 💫 https://github.com/JaKooLit 💫 ---- */
+
+// ### LEFT PANEL ### //
+
+{
+"include": [
+  "$HOME/.config/waybar/Modules",
+  "$HOME/.config/waybar/ModulesWorkspaces",
+  "$HOME/.config/waybar/ModulesCustom",
+  "$HOME/.config/waybar/ModulesGroups",
+  ],
+"layer": "top",
+"position": "left",
+"margin-top": 0,
+"margin-bottom": 0,
+"margin-left": 0,
+//"margin-right": 3,
+"spacing": 0,
+"fixed-center": true,
+"ipc": true,
+//"gtk-layer-shell": true,
+  
+//"custom/light_dark",
+"modules-left": [
+	"clock#vertical",
+],
+
+"modules-center": [
+	"hyprland/workspaces",
+],
+
+"modules-right": [
+	"mpris",
+	"tray",
+	"custom/swaync",
+	"backlight#vertical",
+	"pulseaudio#microphone_vertical",
+	"pulseaudio#vertical",
+	"custom/power_vertical",
+	"custom/menu",
+],
+}

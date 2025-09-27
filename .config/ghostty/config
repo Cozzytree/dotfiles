@@ -59,4 +59,4 @@ adjust-cell-height = -10%
 background = "#222222"
 foreground = "#efefef"
 
-theme = "arcoiris"
+# theme = "arcoiris"

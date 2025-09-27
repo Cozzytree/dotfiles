@@ -24,8 +24,8 @@ fi
 
 # Output current mode for status bar
 case "$current_mode" in
-    "power-saver") echo "🔋 Power Save" ;;
-    "balanced")    echo "⚖️ Balanced" ;;
-    "performance") echo "🚀 Performance" ;;
-    *)             echo "❓ Unknown" ;;
+    "power-saver") echo "🔋" ;;
+    "balanced")    echo " " ;;
+    "performance") echo "🚀" ;;
+    *)             echo "❓" ;;
 esac
